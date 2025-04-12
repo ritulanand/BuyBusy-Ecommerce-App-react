@@ -1,0 +1,52 @@
+.nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1976d2;
+    padding: 0.75rem 2rem;
+    color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .left {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  
+  .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+    color: white;
+  }
+  
+  .navItem {
+    font-size: 1rem;
+    text-decoration: none;
+    color: white;
+    transition: color 0.3s ease;
+  }
+  
+  .navItem:hover {
+    color: #bbdefb;
+  }
+  
+  .right {
+    display: flex;
+    align-items: center;
+  }
+  
+  .signIn {
+    text-decoration: none;
+    color: white;
+    background-color: #1565c0;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .signIn:hover {
+    background-color: #0d47a1;
+  }
+  
