@@ -8,8 +8,6 @@ import {
 } from 'react';
 
 
-
-
 //IMPORT DATABASE
 import { db , auth} from "./firebaseInit"
 
@@ -67,6 +65,7 @@ const reducer = (state, action) => {
                 userCart: state.userCart.filter(product => product.id !== action.payload)
             };
 
+        
         default:
             return state;
     }
@@ -91,13 +90,7 @@ export const UserContextProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState );
     console.log("state", state);
 
-    //authentication
-    // const [authenticate, setAuthenticate] = useState(false);
 
-    //make user info
-    // const [userCart, setUserCart] = useState([]);
-    // const [userOrder, setUserOrder] = useState([]);
-    // const [userId, setUserId] = useState("");
 
     //get date
     const currentDate = new Date();
@@ -110,19 +103,17 @@ export const UserContextProvider = ({ children }) => {
         console.log("email passwo", email, password);
         try{
        const userCredential = await signInWithEmailAndPassword(auth, email,password);
-       if (!userCredential) {
-        toast.error("Invalid email/Password");
-    }
-    else{     
-        toast.success("Login Successfully");
-        navigate('/');
-        
-    }
+    
        console.log("userred", userCredential);
+       
        dispatch({type: "SET_USER", payload : userCredential.user});
-        }catch(error){
-            alert("please enter correct details")
+       
+       return userCredential;
+        }
+        catch(error){
+            // alert("please enter correct details");
             console.log("eror", error);
+            return error;
         }
      
     }
@@ -132,26 +123,21 @@ export const UserContextProvider = ({ children }) => {
         try{
         const userCredential =  await createUserWithEmailAndPassword(auth, email, password);
         console.log("userred sugn up", userCredential);
-        
-        await updateProfile(auth.currentUser, {displayName : name});
+        if(userCredential){
+            await updateProfile(auth.currentUser, {displayName : name});
 
-        dispatch({type: "SET_USER", payload : { ...userCredential.user, displayName : name}});
-
-        await setDoc(doc(db , "users", userCredential.user.uid), {name, email} );
-
-        toast.success("Signup Successfully");
+            dispatch({type: "SET_USER", payload : { ...userCredential.user, displayName : name}});
+    
+            await setDoc(doc(db , "users", userCredential.user.uid), {name, email} );
+            // await setDoc(doc(db , "users", user.uid, "cart", ), {name, email} );
+        }
+       
+        return userCredential;
         }catch(error){
-            console.log("error", error);
-            alert("please enter correct details")
-            // if (error.code === 'auth/weak-password') {
-            //     return "Password should be at least 6 characters";
-            //   } else if (error.code === 'auth/email-already-in-use') {
-            //     return "This email is already in use";
-            //   } else if (error.code === 'auth/invalid-email') {
-            //     return "Invalid email address";
-            //   } else {
-            //     return "Registration failed: " + error.message;
-            //   }
+            console.log("error signup", error);
+            // alert("please enter correct details")
+            return error;
+            
         }
        
         
