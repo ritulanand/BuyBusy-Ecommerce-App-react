@@ -13,10 +13,12 @@ import { NavLink } from "react-router-dom"
 
 // GETTING TOAST
 import { toast } from 'react-toastify';
+import { db } from "../../firebaseInit";
+import { addDoc, collection, doc, getDocs, updateDoc } from "firebase/firestore";
 
 const Home = () => {
     const { userCart, setCartUser, user } = useUserContext();
-    console.log("user home", user);
+    // console.log("user home", user);
 
     //FILTER
     //filter search
@@ -78,18 +80,27 @@ const Home = () => {
         const matchPrice = product.price <= priceFilter;
 
         const matchCategory = selectedCategories.length === 0 || selectedCategories.some((category) => product.category.toLowerCase() === category.toLowerCase());
-        console.log("matchsearch", matchSearch);
-        console.log("matchPrice", matchPrice);
-        console.log("matchCategory", matchCategory);
+        // console.log("matchsearch", matchSearch);
+        // console.log("matchPrice", matchPrice);
+        // console.log("matchCategory", matchCategory);
 
         return matchCategory && matchSearch && matchPrice;
     })
 
      //add to cart
-     const addToCart = (id) => {
+     const addToCart = async (id) => {
+        console.log("id", id)
+        if (!userCart || !products) {
+            console.error("userCart or products is undefined");
+            return;
+        }
 
-        let alreadyInCart = userCart.find((product) => product.id === id);
-        let newCartProduct = products.find((product) => product.id === id);
+        // const cartsData = await getDocs(collection(db, "users", user.uid, "carts"));
+        // const userCartData = cartsData.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+        // console.log("usercart", userCartData);
+
+        let alreadyInCart = userCart.find((product) => product.id == id);
+        let newCartProduct = products.find((product) => product.id == id);  
         console.log("usercart", userCart);
         console.log("alreadt", alreadyInCart);
         console.log("newcartproduct", products);
@@ -97,17 +108,44 @@ const Home = () => {
 
         if (alreadyInCart) {
             console.log("cart alredy");
-            setCartUser(
-                userCart.map((item) =>
-                    item.id === id ? { ...item, count: item.count + 1 } : item
-                )
-            )
+
+              // Update the existing product in the cart
+            const cartItemRef = doc(db, "users", user.uid, "carts", alreadyInCart.id);
+            console.log("cartItemRef", cartItemRef);
+            await updateDoc(cartItemRef, {
+                count: alreadyInCart.count + 1, // Increment the count
+            });
+            
+
+            
+        
+            // setCartUser(
+            //     userCart.map((item) =>
+            //         item.id === id ? { ...item, count: item.count + 1 } : item
+            //     )
+            // )
+           
             toast.success("Item count increased Added to Cart");
         }
         else {
             console.log("else added");
             newCartProduct.count = 1;
+            
+           // Reference to the user's carts collection
+           const cartsCollectionRef = collection(db, "users", user.uid, "carts");
+
+           // Add the new product to the carts collection
+           const docRef = await addDoc(cartsCollectionRef, {
+               ...newCartProduct,
+           });
+
+           console.log("docref", docRef);
+
+           // Assign the generated document ID to the product
+           newCartProduct.id = docRef.id;
+           console.log("newcartproduct id", newCartProduct.id);
             setCartUser([...userCart, newCartProduct]);
+            
             toast.success("Item Added to Cart");
         }
     }
@@ -116,7 +154,7 @@ const Home = () => {
 
     //set selected catagory
     const isCategorySelected = (category) => {
-        console.log("selectedcat", selectedCategories);
+        // console.log("selectedcat", selectedCategories);
         return selectedCategories.includes(category);
       };
     return (

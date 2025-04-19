@@ -18,7 +18,8 @@ import {
     collection,
     getDocs,
     updateDoc,
-    doc
+    doc,
+    deleteDoc
 } from 'firebase/firestore';
 
 //GETTING TOAST
@@ -88,7 +89,7 @@ export const UserContextProvider = ({ children }) => {
 
 
     const [state, dispatch] = useReducer(reducer, initialState );
-    console.log("state", state);
+    // console.log("state", state);
 
 
 
@@ -100,11 +101,11 @@ export const UserContextProvider = ({ children }) => {
 
     //check authentication
     const authenticateUser = async (email, password) => {
-        console.log("email passwo", email, password);
+        // console.log("email passwo", email, password);
         try{
        const userCredential = await signInWithEmailAndPassword(auth, email,password);
     
-       console.log("userred", userCredential);
+    //    console.log("userred", userCredential);
        
        dispatch({type: "SET_USER", payload : userCredential.user});
        
@@ -169,7 +170,8 @@ export const UserContextProvider = ({ children }) => {
     };
 
     //remove from cart
-    const removeFromCart = (id) => {
+    const removeFromCart = async(id) => {
+        await deleteDoc(doc(db, "users", state.user.uid, "carts", id));
         dispatch({ type: "REMOVE_FROM_CART", payload: id });
         toast.error("Item deleted Successfully");
     }
@@ -186,6 +188,18 @@ export const UserContextProvider = ({ children }) => {
             unsubscribe();
           }
     }, [])
+
+    useEffect(() => {
+        const getUserCart = async () => {
+            if (state.user) {
+                const cartsData = await getDocs(collection(db, "users", state.user.uid, "carts"));
+                const userCartData = cartsData.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+                // console.log("usercart", userCartData);
+                dispatch({ type: "SET_CART", payload: userCartData });
+            }
+        }
+        getUserCart();
+    }, [state.user, state.userCart])
 
     return (
         <userContext.Provider value={{

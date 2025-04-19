@@ -7,7 +7,7 @@ import { useUserContext } from "../../userContext";
 const Navbar = ()  => {
 
   const {user, logout} = useUserContext();
-console.log("user", user);
+// console.log("user", user);
   // console.log("authenticate", {authenticate});
   return (
     <>
