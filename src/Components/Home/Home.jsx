@@ -52,19 +52,41 @@ const Home = () => {
         setSearchQuery(e.target.value);
     };
     //using fakestore API to render fake items in page
+    // useEffect(() => {
+    //     fetch('https://fakestoreapi.com/products')
+    //     .then(res =>  res.json()).then( data => {
+    //         console.log("data", data);
+    //         setProducts(data);
+    //         setLoading(false);
+    //     })
+    //     .catch(err => {
+    //         console.log("err", err);
+    //         setLoading(false);
+    //     })
+    // }, []);
    
 
-    useEffect(() => {
-        fetch('https://fakestoreapi.com/products')
-        .then(res =>  res.json()).then( data => {
-            console.log("data", data);
-            setProducts(data);
-            setLoading(false);
-        })
-        .catch(err => {
-            console.log("err", err);
-            setLoading(false);
-        })
+    //  Fetch products from Firestore
+     useEffect(() => {
+        const fetchProductsFromFirestore = async () => {
+            try {
+                const productsCollectionRef = collection(db, "products");
+                const productsSnapshot = await getDocs(productsCollectionRef);
+                console.log("productsSnapshot", productsSnapshot.docs);
+                const productsData = productsSnapshot.docs.map((doc) => ({
+                    ...doc.data(),
+                    id: doc.id, // Use Firestore document ID
+                }));
+                console.log("productsData", productsData);
+                setProducts(productsData);
+                setLoading(false);
+            } catch (error) {
+                console.error("Error fetching products from Firestore:", error);
+                setLoading(false);
+            }
+        };
+
+        fetchProductsFromFirestore();
     }, []);
 
 
@@ -95,9 +117,6 @@ const Home = () => {
             return;
         }
 
-        // const cartsData = await getDocs(collection(db, "users", user.uid, "carts"));
-        // const userCartData = cartsData.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-        // console.log("usercart", userCartData);
 
         let alreadyInCart = userCart.find((product) => product.id == id);
         let newCartProduct = products.find((product) => product.id == id);  
@@ -119,11 +138,11 @@ const Home = () => {
 
             
         
-            // setCartUser(
-            //     userCart.map((item) =>
-            //         item.id === id ? { ...item, count: item.count + 1 } : item
-            //     )
-            // )
+            setCartUser(
+                userCart.map((item) =>
+                    item.id === id ? { ...item, count: item.count + 1 } : item
+                )
+            )
            
             toast.success("Item count increased Added to Cart");
         }
