@@ -141,7 +141,7 @@ const Home = () => {
             
             setCartUser(
                 userCart.map((item) =>
-                    item.id === id ? { ...item, count: item.count + 1 } : item
+                    item.id === alreadyInCart.id ? { ...item, count: item.count + 1 } : item
                 )
             )
            
