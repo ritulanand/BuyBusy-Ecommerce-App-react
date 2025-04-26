@@ -82,6 +82,7 @@ export const UserContextProvider = ({ children }) => {
         await signOut(auth);
     };
 
+
     // SET CART
     const setCartUser = (cart) => {
         dispatch({ type: "SET_CART", payload: cart });
@@ -146,8 +147,8 @@ const addProductsToFirestore = async (products) => {
         console.log("productsCollectionRef", productsCollectionRef);
 
         for (const product of products.slice(0, 20)) {
-            console.log("product", product.id);
-            const productRef = doc(productsCollectionRef, product.id.toString());
+            console.log("product", product.product_id);
+            const productRef = doc(productsCollectionRef, product.product_id.toString());
             await setDoc(productRef, product); // Overwrites if exists
         }
 
@@ -157,6 +158,33 @@ const addProductsToFirestore = async (products) => {
     }
 };
 
+
+const getAllUsers = async () => {
+    try {
+        const usersCollectionRef = collection(db, "users"); // Reference to the 'users' collection
+        const usersSnapshot = await getDocs(usersCollectionRef); // Fetch all documents in the collection
+
+        // Map through the documents and extract user data
+        const users = usersSnapshot.docs.map((doc) => ({
+            id: doc.id, // Firestore document ID
+            ...doc.data(), // User data
+        }));
+
+        console.log("Fetched users:", users); // Print users to the console
+        return users; // Return the users if needed elsewhere
+    } catch (error) {
+        console.error("Error fetching users:", error);
+    }
+};
+
+useEffect(() => {
+    const fetchUsers = async () => {
+        const users = await getAllUsers(); // Fetch users
+        console.log("All users:", users); // Print users to the console
+    };
+
+    fetchUsers();
+}, []); // Run only once when the component mounts
 
 
    

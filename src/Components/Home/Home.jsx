@@ -117,13 +117,15 @@ const Home = () => {
             return;
         }
 
+        console.log("userCart__  ",userCart);
 
-        let alreadyInCart = userCart.find((product) => product.id == id);
-        let newCartProduct = products.find((product) => product.id == id);  
+        let alreadyInCart = userCart.find((product) => product.product_id == id);//TODO "YgB3uBFNnjTjRlsI4DL5"  == "1"
+        let newCartProduct = products.find((product) => product.product_id == id); //REmove 
         console.log("usercart", userCart);
         console.log("alreadt", alreadyInCart);
         console.log("newcartproduct", products);
-        console.log("newcartproduct", newCartProduct);
+        console.log("newcartproduct>>", newCartProduct);
+        
 
         if (alreadyInCart) {
             console.log("cart alredy");
@@ -137,7 +139,6 @@ const Home = () => {
             
 
             
-        
             setCartUser(
                 userCart.map((item) =>
                     item.id === id ? { ...item, count: item.count + 1 } : item
@@ -253,7 +254,7 @@ const Home = () => {
                                     </p>
                                 </div>
                                 {user?
-                                <button className={styles.btn} onClick={() => addToCart(item.id)}>Add to Cart</button>
+                                <button className={styles.btn} onClick={() => addToCart(item.product_id)}>Add to Cart</button>
                                 :
                                 <NavLink to='/login' className={styles.btn} >Add to Cart</NavLink>
                                 }  
