@@ -1,52 +1,114 @@
 .nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #1976d2;
-    padding: 0.75rem 2rem;
-    color: white;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1976d2;
+  padding: 0.75rem 2rem;
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: white;
+}
+
+.navItem {
+  font-size: 1rem;
+  text-decoration: none;
+  color: white;
+  transition: color 0.3s ease;
+}
+
+.navItem:hover {
+  color: #bbdefb;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+}
+
+.signIn {
+  text-decoration: none;
+  color: white;
+  background-color: #1565c0;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+
+.signIn:hover {
+  background-color: #0d47a1;
+}
+
+/* Mobile View Styles */
+@media (max-width: 768px) {
+  .nav {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 1rem;
   }
-  
+
   .left {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
+      width: 100%;
+      justify-content: space-between;
+      margin-bottom: 1rem;
   }
-  
+
   .logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-decoration: none;
-    color: white;
+      font-size: 1.2rem;
   }
-  
+
   .navItem {
-    font-size: 1rem;
-    text-decoration: none;
-    color: white;
-    transition: color 0.3s ease;
+      font-size: 0.9rem;
   }
-  
-  .navItem:hover {
-    color: #bbdefb;
-  }
-  
+
   .right {
-    display: flex;
-    align-items: center;
+      width: 100%;
+      justify-content: flex-end;
   }
-  
+
   .signIn {
-    text-decoration: none;
-    color: white;
-    background-color: #1565c0;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    transition: background-color 0.3s ease;
+      font-size: 0.9rem;
+      padding: 0.4rem 0.8rem;
   }
-  
-  .signIn:hover {
-    background-color: #0d47a1;
+}
+
+@media (max-width: 480px) {
+  .nav {
+      padding: 0.5rem;
   }
-  
+
+  .left {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+  }
+
+  .logo {
+      font-size: 1rem;
+  }
+
+  .navItem {
+      font-size: 0.8rem;
+  }
+
+  .right {
+      justify-content: center;
+      margin-top: 0.5rem;
+  }
+
+  .signIn {
+      font-size: 0.8rem;
+      padding: 0.3rem 0.6rem;
+  }
+}

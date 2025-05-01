@@ -102,21 +102,24 @@
     width: 100%;
     height: 80%;
 }
-.productDetailContainer{
+
+.productDetailContainer {
     display: flex;
     flex-direction: column;
     justify-content: center;
     width: 100%;
     align-items: flex-start;
 }
-.name{
+
+.name {
     color: #303088;
     font-size: 1.5rem;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     font-weight: 500;
     padding: 0.5rem 1rem;
 }
-.price{
+
+.price {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -126,7 +129,8 @@
     font-weight: 600;
     color: #303088;
 }
-.btn{
+
+.btn {
     width: 100%;
     background-color: #4a15ad;
     color: #fff;
@@ -141,10 +145,84 @@
     text-align: center;
     text-decoration: none;
 }
-.btn:hover{
+
+.btn:hover {
     background-color: #fff;
     color: #4a15ad;
 }
-.btn:active{
+
+.btn:active {
     scale: 0.9;
+}
+
+/* Mobile View Styles */
+@media (max-width: 768px) {
+    .filterContainer {
+        position: static;
+        width: 100%;
+        margin-bottom: 1rem;
+        padding: 1rem;
+    }
+
+    .searchContainer {
+        width: 90%;
+        margin-top: 2rem;
+    }
+
+    .productContainerGrid {
+        grid-template-columns: repeat(2, 1fr);
+        margin: 1rem;
+        padding: 1rem;
+    }
+
+    .productContainer {
+        padding: 0.8rem;
+    }
+
+    .name {
+        font-size: 1.2rem;
+    }
+
+    .price {
+        font-size: 1.2rem;
+    }
+
+    .btn {
+        font-size: 1.2rem;
+        padding: 0.7rem 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .filterContainer {
+        padding: 0.8rem;
+    }
+
+    .searchContainer {
+        width: 100%;
+        margin-top: 1rem;
+    }
+
+    .productContainerGrid {
+        grid-template-columns: 1fr;
+        margin: 0.5rem;
+        padding: 0.5rem;
+    }
+
+    .productContainer {
+        padding: 0.5rem;
+    }
+
+    .name {
+        font-size: 1rem;
+    }
+
+    .price {
+        font-size: 1rem;
+    }
+
+    .btn {
+        font-size: 1rem;
+        padding: 0.5rem 0;
+    }
 }
