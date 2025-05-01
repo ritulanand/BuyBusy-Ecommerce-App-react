@@ -68,9 +68,10 @@ export const UserContextProvider = ({ children }) => {
     const newUser = async (name, email, password) => {
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            console.log("usercfred", userCredential);
             await updateProfile(auth.currentUser, { displayName: name });
             dispatch({ type: "SET_USER", payload: { ...userCredential.user, displayName: name } });
-            await setDoc(doc(db, "users", userCredential.user), { name, email });
+            await setDoc(doc(db, "users", userCredential.user.uid), { name, email });
             return userCredential;
         } catch (error) {
             console.log("error signup", error);
